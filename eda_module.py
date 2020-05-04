@@ -3,6 +3,32 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
+def plot_target_dist(df):
+    sns.set(style = 'whitegrid')
+    sns.set_context('paper', font_scale = 2)
+    fig = plt.figure(figsize = (20, 10))
+    plt.subplot(121)
+    plt.pie(df.churn.value_counts(),labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops={'fontsize': 20, 'fontweight': 'bold'})
+    plt.title('Churn Outcome Pie Chart', fontsize = 20, fontweight = 'bold')
+    plt.subplot(122)
+    t = sns.countplot(df.churn)
+    t.set_xlabel('Churn', fontweight = 'bold', fontsize = 20)
+    t.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
+    plt.title('Churn Outcome Distributions', fontsize = 20, fontweight = 'bold')
+    plt.tight_layout()
+
+    
+def plot_cat_dist(df, feature):
+    sns.set(style = 'whitegrid')
+    sns.set_context('paper', font_scale = 2)
+    fig = plt.figure(figsize = (20, 10))
+    plt.subplot(121)
+    plt.pie(df[df.churn == 'yes'][feature].value_counts(), autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    
+    
+    
+    
+    
 def plot_kde(df, feature):
     plt.figure(figsize = (15, 5))
     plt.title(f"KDE Plot: {feature}", fontsize = 20, fontweight = 'bold')
@@ -61,3 +87,30 @@ def plot_numerical_averages(df, feature):
     b.set_title(f'Average {feature} by Tenure Group', fontsize = 30, fontweight = 'bold')
     b.legend(fontsize = 20, loc = 'upper left', edgecolor = 'black')
     plt.tight_layout()
+    
+
+def plot_gender_dist(df):
+    sns.set(style = 'whitegrid')
+    sns.set_context('paper', font_scale = 2)
+    fig = plt.figure(figsize = (20,10))
+    plt.subplot(121)
+    plt.pie(df.gender.value_counts(), labels = ['Male', 'Female'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Overall Data Gender Composition', fontweight = 'bold', fontsize = 30)
+    plt.subplot(122)
+    a = sns.countplot(data = df, x = 'gender', hue = 'churn')
+    a.set_title('Gender Distribution by Churn', fontsize = 30, fontweight = 'bold')
+    a.set_xlabel('Gender', fontweight = 'bold', fontsize = 20)
+    a.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
+    
+def plot_age_dist(df):
+    sns.set(style = 'whitegrid')
+    sns.set_context('paper', font_scale = 2)
+    fig = plt.figure(figsize = (20,10))
+    plt.subplot(121)
+    plt.pie(df.seniorcitizen.value_counts(), labels = ['Senior Citizen', 'Not'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Overall Data Age Composition', fontweight = 'bold', fontsize = 30)
+    plt.subplot(122)
+    a = sns.countplot(data = df, x = 'seniorcitizen', hue = 'churn')
+    a.set_title('Age Distribution by Churn', fontsize = 30, fontweight = 'bold')
+    a.set_xlabel('seniorcitizen', fontweight = 'bold', fontsize = 20)
+    a.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
