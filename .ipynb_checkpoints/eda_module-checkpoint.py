@@ -18,17 +18,6 @@ def plot_target_dist(df):
     t.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
     plt.title('Churn Outcome Distributions', fontsize = 20, fontweight = 'bold')
     plt.tight_layout()
-
-    
-def plot_cat_dist(df, feature):
-    sns.set(style = 'whitegrid')
-    sns.set_context('paper', font_scale = 2)
-    fig = plt.figure(figsize = (20, 10))
-    plt.subplot(121)
-    plt.pie(df[df.churn == 'yes'][feature].value_counts(), autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    
-    
-    
     
     
 def plot_kde(df, feature):
@@ -41,19 +30,6 @@ def plot_kde(df, feature):
         plt.xlabel('Tenure Length (Months)')
     else:
         plt.xlabel('Charge Amount ($)')
-    plt.tight_layout()
-    
-    
-def plot_hist(df, feature):
-    plt.figure(figsize = (15, 5))
-    plt.title(f'Histogram: {feature}', fontsize = 20, fontweight = 'bold')
-    ax = sns.distplot(df[df.churn == 'No'][feature].dropna(), label = 'No Churn')
-    plt.legend(labels = ['No Churn', 'Churn'])
-    ax1 = sns.distplot(df[df.churn == 'Yes'][feature].dropna(), label = 'Churn')
-    if feature == 'tenure':
-        plt.set_xlabel('Tenure Length (Months)')
-    else:
-        plt.set_xlabel('Charge Amount ($)')
     plt.tight_layout()
     
     
@@ -70,6 +46,7 @@ def tenure_groups(df):
         return "less_than_5"
     else:
         return "greater_than_5"
+    
     
 def tenure_group_counts(df):
     plt.figure(figsize = (20,13))
@@ -104,9 +81,8 @@ def plot_gender_dist(df):
     a.set_xlabel('Gender', fontweight = 'bold', fontsize = 20)
     a.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
     
+    
 def plot_age_dist(df):
-    sns.set(style = 'whitegrid')
-    sns.set_context('paper', font_scale = 2)
     
     fig = plt.figure(figsize = (20,20))
     
@@ -135,3 +111,44 @@ def plot_age_dist(df):
     plt.title('Churn % among Non-Senior Citizens', fontsize = 30, fontweight = 'bold')
     
     
+def plot_partner_dependents(df):
+    
+    fig = plt.figure(figsize = (25,25))
+    x = df.copy()
+    plt.subplot(321)
+    plt.pie(df.partner.value_counts(), labels = ['No Partner', 'Partner'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Partner Composition of Overall Data', fontweight = 'bold', fontsize = 30)
+    
+    plt.subplot(322)
+    plt.pie(df.dependents.value_counts(), labels = ['No Dependents', 'Dependents'], autopct = '%.1f%%', radius = 1,  textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Dependent Composition of Overall Data', fontsize = 30, fontweight = 'bold')
+    
+    plt.subplot(325)
+    x = df.copy()
+    x = x.groupby('partner')['churn'].value_counts().to_frame()
+    x = x.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    x['pct_total'] = x['pct_total']/len(df)
+    u = sns.barplot('partner', y = 'pct_total', hue = 'churn', data = x)
+    u.set_title('Churn % by Partner', fontweight = 'bold', fontsize = 30)
+    u.set(xticklabels = ['No Partner', 'Partner'])
+    u.set_xlabel('')
+    u.set_ylabel('Percentage of Total', fontweight = 'bold', fontsize = 20)
+    
+    plt.subplot(326)
+    y = df.copy()
+    y = y.groupby('dependents')['churn'].value_counts().to_frame()
+    y = y.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    y['pct_total'] = y['pct_total']/len(df)
+    v = sns.barplot('dependents', y = 'pct_total', hue = 'churn', data = y)
+    v.set_title('Churn % by Dependents', fontweight = 'bold', fontsize = 30)
+    v.set(xticklabels = ['No Dependents', 'Dependents'])
+    v.set_xlabel('')
+    v.set_ylabel('')
+    
+    plt.subplot(323)
+    plt.pie(df[df.partner == 'Yes'].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Churn % - Customers with Partners', fontsize = 30, fontweight = 'bold')
+    
+    plt.subplot(324)
+    plt.pie(df[df.dependents == 'Yes'].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Churn % - Customers with Dependents', fontsize = 30, fontweight = 'bold')
