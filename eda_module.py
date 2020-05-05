@@ -159,13 +159,13 @@ def plot_services(df):
     
     phone_only = df[(df.phoneservice == 'Yes') & (df.internetservice == 'No')]
     
-    fig = plt.figure(figsize = (30, 10))
+    fig = plt.figure(figsize = (30, 20))
 
-    plt.subplot(131)
+    plt.subplot(231)
     plt.pie(phone_only.churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Churn % - Phone Service Only', fontsize = 30, fontweight = 'bold')
+    plt.title('Customer Churn - Phone Service Only', fontsize = 30, fontweight = 'bold')
     
-    plt.subplot(132)
+    plt.subplot(232)
     z = df.copy()
     z = z.groupby('phoneservice')['churn'].value_counts().to_frame()
     z = z.rename({'churn':'pct_total'}, axis = 1).reset_index()
@@ -174,30 +174,31 @@ def plot_services(df):
     a.set_title('% Churn by Phone Service', fontsize = 30, fontweight = 'bold')
     a.set(xticklabels = ['No Phone', 'Phone'])
     a.set_xlabel('')
-    a.set_ylabel('Percentage of Total', fontweight = 'bold')
+    a.set_ylabel('% of Customers', fontweight = 'bold')
     
     
-    plt.subplot(133)
-    aa = df.copy()
-    aa = aa.groupby(['churn', 'phoneservice'])['monthlycharges'].mean().to_frame()
-    aa = aa.reset_index()
-    r = sns.barplot('phoneservice', y = 'monthlycharges', hue = 'churn', data = aa)
-    r.set_title('Phone Service - Mean Monthly Charges', fontsize = 30, fontweight = 'bold')
-    r.set_xlabel('')
-    r.set(xticklabels = ['No Phone', 'Phone'])
-    r.set_ylabel('Mean Monthly Charge ($)', fontweight = 'bold', fontsize = 20)
+    plt.subplot(233)
+#     aa = df.copy()
+#     aa = aa.groupby(['churn', 'phoneservice'])['monthlycharges'].mean().to_frame()
+#     aa = aa.reset_index()
+#     r = sns.barplot('phoneservice', y = 'monthlycharges', hue = 'churn', data = aa)
+#     r.set_title('Phone Service - Mean Monthly Charges', fontsize = 30, fontweight = 'bold')
+#     r.set_xlabel('')
+#     r.set(xticklabels = ['No Phone', 'Phone'])
+#     r.set_ylabel('Mean Monthly Charge ($)', fontweight = 'bold', fontsize = 20)
+    v1 = sns.violinplot('phoneservice', 'monthlycharges', 'churn', df, split = True)
+    v1.set_title('Violin Plot: Monthly Charges by Phone Service', fontsize = 30, fontweight = 'bold')
+    v1.set_xlabel('')
+    v1.set_ylabel('Monthly Charges ($)', fontsize = 20, fontweight = 'bold')
+    v1.set(xticklabels = ['No Phone', 'Phone'])
     
-    fig.tight_layout()
-    
-def plot_multiplelines(df):
-    
-    fig = plt.figure(figsize = (30, 10))
-    
-    plt.subplot(121)
+    plt.subplot(234)
     plt.pie(df.multiplelines.value_counts(), labels = ['Singular Line', 'Multiple Lines', 'No Phone Service'], autopct = '%.1f%%', radius = 1, textprops = {'fontweight':'bold', 'fontsize': 20}, startangle = 180)
+    plt.title('Customer Churn - Qty. of Lines', fontsize = 30, fontweight = 'bold')
+    
 
     
-    plt.subplot(122)
+    plt.subplot(235)
     bb = df.copy()
     bb = bb.groupby('multiplelines')['churn'].value_counts().to_frame()
     bb = bb.rename({'churn':'pct_total'}, axis = 1).reset_index()
@@ -207,5 +208,13 @@ def plot_multiplelines(df):
     c.set_title('')
     c.set_xlabel('')
     c.set_ylabel('% of Customers', fontweight = 'bold', fontsize = 20)
+    c.set_title('% Churn by Phone Line Qty.', fontsize = 30, fontweight = 'bold')
     
-    fig.suptitle('Customers w/ Multiple Lines', fontweight = 'bold', fontsize = 30)
+    plt.subplot(236)
+    v = sns.violinplot('multiplelines', 'monthlycharges', 'churn', df, split = True)
+    v.set_title('Violin Plot: Monthly Charges by Line Quantity', fontweight = 'bold', fontsize = 30)
+    v.set_xlabel('')
+    v.set_ylabel('Monthly Charges ($)', fontweight = 'bold')
+    v.set(xticklabels = ['No Phone Service', 'Singular Line', 'Multiple Lines'])
+    
+    fig.suptitle('Phone Services -  Line Quantity', fontweight = 'bold', fontsize = 40)
