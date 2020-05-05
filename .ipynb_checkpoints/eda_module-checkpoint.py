@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import matplotlib.gridspec as gridspec
+
 
 def plot_target_dist(df):
     sns.set(style = 'whitegrid')
@@ -45,9 +47,9 @@ def plot_kde(df, feature):
 def plot_hist(df, feature):
     plt.figure(figsize = (15, 5))
     plt.title(f'Histogram: {feature}', fontsize = 20, fontweight = 'bold')
-    ax = sns.distplot(df[df.churn == 'No'][feature].dropna(), label = 'No Churn', alpha = .7)
+    ax = sns.distplot(df[df.churn == 'No'][feature].dropna(), label = 'No Churn')
     plt.legend(labels = ['No Churn', 'Churn'])
-    ax1 = sns.distplot(df[df.churn == 'Yes'][feature].dropna(), label = 'Churn', alpha = .7)
+    ax1 = sns.distplot(df[df.churn == 'Yes'][feature].dropna(), label = 'Churn')
     if feature == 'tenure':
         plt.set_xlabel('Tenure Length (Months)')
     else:
@@ -105,12 +107,31 @@ def plot_gender_dist(df):
 def plot_age_dist(df):
     sns.set(style = 'whitegrid')
     sns.set_context('paper', font_scale = 2)
-    fig = plt.figure(figsize = (20,10))
-    plt.subplot(121)
-    plt.pie(df.seniorcitizen.value_counts(), labels = ['Senior Citizen', 'Not'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Overall Data Age Composition', fontweight = 'bold', fontsize = 30)
-    plt.subplot(122)
-    a = sns.countplot(data = df, x = 'seniorcitizen', hue = 'churn')
-    a.set_title('Age Distribution by Churn', fontsize = 30, fontweight = 'bold')
-    a.set_xlabel('seniorcitizen', fontweight = 'bold', fontsize = 20)
-    a.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
+    
+    fig = plt.figure(figsize = (20,20))
+    
+    plt.subplot(221)
+    plt.pie(df.seniorcitizen.value_counts(), labels = ['Non-Senior Citizen', 'Senior'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Age Composition of Overall Data', fontweight = 'bold', fontsize = 30)
+    
+    plt.subplot(222)
+    g = df.copy()
+    g = g.groupby('seniorcitizen')['churn'].value_counts().to_frame()
+    g = g.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    g['pct_total'] = g['pct_total']/len(df)
+    t = sns.barplot('seniorcitizen', y = 'pct_total', hue = 'churn', data = g)
+    t.set_title('Churn % by Age', fontsize = 30, fontweight = 'bold')
+    t.set_xlabel('')
+    t.set_ylabel('Percentage of Customers', fontsize = 20, fontweight = 'bold')
+    t.set(xticklabels = ['Non-Senior Citizen', 'Senior Citizen'])
+    
+  
+    plt.subplot(223)
+    plt.pie(df[df.seniorcitizen == 1].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Churn % among Senior Citizens', fontsize = 30, fontweight = 'bold')
+    
+    plt.subplot(224)
+    plt.pie(df[df.seniorcitizen == 0].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Churn % among Non-Senior Citizens', fontsize = 30, fontweight = 'bold')
+    
+    
