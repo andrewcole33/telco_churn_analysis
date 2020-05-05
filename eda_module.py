@@ -154,3 +154,58 @@ def plot_partner_dependents(df):
     plt.title('Churn % - Customers with Dependents', fontsize = 30, fontweight = 'bold')
 
     
+
+def plot_services(df):
+    
+    phone_only = df[(df.phoneservice == 'Yes') & (df.internetservice == 'No')]
+    
+    fig = plt.figure(figsize = (30, 10))
+
+    plt.subplot(131)
+    plt.pie(phone_only.churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.title('Churn % - Phone Service Only', fontsize = 30, fontweight = 'bold')
+    
+    plt.subplot(132)
+    z = df.copy()
+    z = z.groupby('phoneservice')['churn'].value_counts().to_frame()
+    z = z.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    z['pct_total'] = z['pct_total']/len(df)
+    a = sns.barplot('phoneservice', y = 'pct_total', hue = 'churn', data = z)
+    a.set_title('% Churn by Phone Service', fontsize = 30, fontweight = 'bold')
+    a.set(xticklabels = ['No Phone', 'Phone'])
+    a.set_xlabel('')
+    a.set_ylabel('Percentage of Total', fontweight = 'bold')
+    
+    
+    plt.subplot(133)
+    aa = df.copy()
+    aa = aa.groupby(['churn', 'phoneservice'])['monthlycharges'].mean().to_frame()
+    aa = aa.reset_index()
+    r = sns.barplot('phoneservice', y = 'monthlycharges', hue = 'churn', data = aa)
+    r.set_title('Phone Service - Mean Monthly Charges', fontsize = 30, fontweight = 'bold')
+    r.set_xlabel('')
+    r.set(xticklabels = ['No Phone', 'Phone'])
+    r.set_ylabel('Mean Monthly Charge ($)', fontweight = 'bold', fontsize = 20)
+    
+    fig.tight_layout()
+    
+def plot_multiplelines(df):
+    
+    fig = plt.figure(figsize = (30, 10))
+    
+    plt.subplot(121)
+    plt.pie(df.multiplelines.value_counts(), labels = ['Singular Line', 'Multiple Lines', 'No Phone Service'], autopct = '%.1f%%', radius = 1, textprops = {'fontweight':'bold', 'fontsize': 20}, startangle = 180)
+
+    
+    plt.subplot(122)
+    bb = df.copy()
+    bb = bb.groupby('multiplelines')['churn'].value_counts().to_frame()
+    bb = bb.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    bb['pct_total'] = bb['pct_total']/len(df)
+    c = sns.barplot('multiplelines', y = 'pct_total', hue = 'churn', data = bb)
+    c.set(xticklabels = ['Singular Line', 'No Phone Service', 'Multiple Lines'])
+    c.set_title('')
+    c.set_xlabel('')
+    c.set_ylabel('% of Customers', fontweight = 'bold', fontsize = 20)
+    
+    fig.suptitle('Customers w/ Multiple Lines', fontweight = 'bold', fontsize = 30)
