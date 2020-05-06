@@ -419,8 +419,27 @@ def plot_pay_methods(df):
     
     copy = df.copy()
     
+    plt.figure(figsize = (30, 10))
+    
     plt.subplot(131)
     plt.pie(copy.paymentmethod.value_counts(), labels = ['E-Check', 'Mail Check' , 'Bank Transfer (Auto)', 'Credit Card (Auto)'], autopct = '%.1f%%', textprops = {'fontsize':20, 'fontweight':'bold'}, startangle = -90)
     plt.title('Customer Payment Method Composition', fontsize = 30, fontweight = 'bold')
     
     plt.subplot(132)
+    copy = copy.groupby('paymentmethod')['churn'].value_counts().to_frame()
+    copy = copy.rename({'churn':'pct_total'}, axis = 1).reset_index()
+    copy['pct_total'] = (copy['pct_total']/len(df))*100
+    a = sns.barplot('paymentmethod', 'pct_total', 'churn', data = copy)
+    a.set_title('% Churn - Payment Methods', fontsize = 30, fontweight = 'bold')
+    a.set_xlabel('')
+    a.set_ylabel('% of Customers', fontsize = 20, fontweight = 'bold')
+    a.set_xticklabels(a.get_xticklabels(), rotation = 45)
+    
+    plt.subplot(133)
+    c = sns.violinplot('paymentmethod', 'monthlycharges', 'churn', df, split = True)
+    c.set_title('Violin Plot: Monthly Charge - Payment Methods', fontsize = 30, fontweight = 'bold')
+    c.set_xlabel('')
+    c.set_ylabel('Monthly Charges ($)', fontweight = 'bold', fontsize = 30)
+    c.set_xticklabels(a.get_xticklabels(), rotation = 45)
+    
+    plt.tight_layout()
