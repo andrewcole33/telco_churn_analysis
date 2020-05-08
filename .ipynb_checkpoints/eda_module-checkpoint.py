@@ -11,25 +11,25 @@ def plot_target_dist(df):
     fig = plt.figure(figsize = (20, 10))
     plt.subplot(121)
     plt.pie(df.churn.value_counts(),labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops={'fontsize': 20, 'fontweight': 'bold'})
-    plt.title('Churn Outcome Pie Chart', fontsize = 20, fontweight = 'bold')
+    plt.title('Churn Outcome Pie Chart', fontsize = 30, fontweight = 'bold')
     plt.subplot(122)
     t = sns.countplot(df.churn)
     t.set_xlabel('Churn', fontweight = 'bold', fontsize = 20)
     t.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
-    plt.title('Churn Outcome Distributions', fontsize = 20, fontweight = 'bold')
+    plt.title('Churn Outcome Distributions', fontsize = 30, fontweight = 'bold')
     plt.tight_layout()
     
     
 def plot_kde(df, feature):
     plt.figure(figsize = (15, 5))
-    plt.title(f"KDE Plot: {feature}", fontsize = 20, fontweight = 'bold')
+    plt.title(f"KDE Plot: {feature}", fontsize = 30, fontweight = 'bold')
     ax = sns.kdeplot(df[df.churn == 'No'][feature].dropna(), label = 'No Churn', lw = 2, legend = True)
     plt.legend = True
     ax1 = sns.kdeplot(df[df.churn == 'Yes'][feature].dropna(), label = 'Churn', lw = 2, legend = True)
     if feature == 'tenure':
-        plt.xlabel('Tenure Length (Months)')
+        plt.xlabel('Tenure Length (Months)', fontsize = 20, fontweight = 'bold')
     else:
-        plt.xlabel('Charge Amount ($)')
+        plt.xlabel('Charge Amount ($)', fontsize = 20, fontweight = 'bold')
     plt.tight_layout()
     
     
@@ -49,12 +49,12 @@ def tenure_groups(df):
     
     
 def tenure_group_counts(df):
-    plt.figure(figsize = (20,13))
+    plt.figure(figsize = (13,10))
     t = sns.countplot(data = df, x = 'grouped_tenure', hue = 'churn', order = ['less_than_1', 'less_than_2', 'less_than_3', 'less_than_4', 'less_than_5', 'greater_than_5'])
-    t.set_title('Churn Counts by Tenure Groups', fontsize = 20, fontweight = 'bold')
+    t.set_title('Churn Counts by Tenure Groups', fontsize = 30, fontweight = 'bold')
     t.set_xlabel('Tenure Groups',fontsize = 20, fontweight = 'bold', labelpad = 1.5)
     t.set_ylabel('Count', fontsize = 20, fontweight = 'bold')
-    t.legend(loc = 'upper right', fontsize = 30, labels = ['No Churn', 'Churn'], edgecolor = 'black', bbox_to_anchor = (1.27, 1))
+    t.legend(loc = 'upper right', fontsize = 20, labels = ['No Churn', 'Churn'], edgecolor = 'black', bbox_to_anchor = (1.2, 1))
     plt.tight_layout()
     
     
@@ -62,7 +62,7 @@ def plot_numerical_averages(df, feature):
     fig = plt.figure(figsize = (13, 10))
     b = sns.barplot(data = df, x = 'grouped_tenure', y = feature, hue = 'churn', order = ['less_than_1', 'less_than_2', 'less_than_3', 'less_than_4', 'less_than_5', 'greater_than_5'])
     b.set_xlabel('Tenure Groups', fontweight = 'bold', fontsize = 20)
-    b.set_ylabel(f'{feature} ($)')
+    b.set_ylabel(f'{feature} ($)', fontsize = 20, fontweight = 'bold')
     b.set_title(f'Average {feature} by Tenure Group', fontsize = 30, fontweight = 'bold')
     b.legend(fontsize = 20, loc = 'upper left', edgecolor = 'black')
     plt.tight_layout()
@@ -71,26 +71,36 @@ def plot_numerical_averages(df, feature):
 def plot_gender_dist(df):
     sns.set(style = 'whitegrid')
     sns.set_context('paper', font_scale = 2)
-    fig = plt.figure(figsize = (20,10))
-    plt.subplot(121)
+    fig = plt.figure(figsize = (30,10))
+    
+    plt.subplot(131)
     plt.pie(df.gender.value_counts(), labels = ['Male', 'Female'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
     plt.title('Overall Data Gender Composition', fontweight = 'bold', fontsize = 30)
-    plt.subplot(122)
+    
+    plt.subplot(132)
     a = sns.countplot(data = df, x = 'gender', hue = 'churn')
     a.set_title('Gender Distribution by Churn', fontsize = 30, fontweight = 'bold')
     a.set_xlabel('Gender', fontweight = 'bold', fontsize = 20)
     a.set_ylabel('Count', fontweight = 'bold', fontsize = 20)
     
+    plt.subplot(133)
+    x = sns.violinplot('gender', 'monthlycharges', 'churn', df, split = True)
+    x.set_title('Violin Plot: Monthly Charges by Gender', fontsize = 30, fontweight = 'bold')
+    x.set_xlabel('Gender', fontsize = 20, fontweight = 'bold')
+    x.set_ylabel('Monthly Charges ($)', fontweight = 'bold', fontsize = 20)
+    
+    plt.tight_layout()
+    
     
 def plot_age_dist(df):
     
-    fig = plt.figure(figsize = (20,20))
+    fig = plt.figure(figsize = (30,10))
     
-    plt.subplot(221)
+    plt.subplot(131)
     plt.pie(df.seniorcitizen.value_counts(), labels = ['Non-Senior Citizen', 'Senior'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
     plt.title('Age Composition of Overall Data', fontweight = 'bold', fontsize = 30)
     
-    plt.subplot(222)
+    plt.subplot(132)
     g = df.copy()
     g = g.groupby('seniorcitizen')['churn'].value_counts().to_frame()
     g = g.rename({'churn':'pct_total'}, axis = 1).reset_index()
@@ -99,31 +109,30 @@ def plot_age_dist(df):
     t.set_title('Churn % by Age', fontsize = 30, fontweight = 'bold')
     t.set_xlabel('')
     t.set_ylabel('Percentage of Customers', fontsize = 20, fontweight = 'bold')
-    t.set(xticklabels = ['Non-Senior Citizen', 'Senior Citizen'])
+    t.set_xticklabels(labels = ['Non-Senior Citizen', 'Senior Citizen'], fontweight = 'bold', fontsize = 20)
     
-  
-    plt.subplot(223)
-    plt.pie(df[df.seniorcitizen == 1].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Churn % among Senior Citizens', fontsize = 30, fontweight = 'bold')
+    plt.subplot(133)
+    x = sns.violinplot('seniorcitizen', 'monthlycharges', 'churn', df, split = True)
+    x.set_title('Violin Plot: Monthly Charges by Age', fontsize = 30, fontweight = 'bold')
+    x.set_xlabel('')
+    x.set_ylabel('Monthly Charges ($)', fontsize = 20, fontweight = 'bold')
+    x.set_xticklabels(labels = ['Non-Senior Citizen', 'Senior Citizen'], fontsize = 20, fontweight = 'bold')
     
-    plt.subplot(224)
-    plt.pie(df[df.seniorcitizen == 0].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Churn % among Non-Senior Citizens', fontsize = 30, fontweight = 'bold')
-    
+    plt.tight_layout()
     
 def plot_partner_dependents(df):
     
     fig = plt.figure(figsize = (25,25))
     x = df.copy()
     plt.subplot(321)
-    plt.pie(df.partner.value_counts(), labels = ['No Partner', 'Partner'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
+    plt.pie(df.partner.value_counts(), labels = ['No Partner', 'Partner'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'}, startangle = 90)
     plt.title('Partner Composition of Overall Data', fontweight = 'bold', fontsize = 30)
     
     plt.subplot(322)
     plt.pie(df.dependents.value_counts(), labels = ['No Dependents', 'Dependents'], autopct = '%.1f%%', radius = 1,  textprops = {'fontsize':20, 'fontweight':'bold'})
     plt.title('Dependent Composition of Overall Data', fontsize = 30, fontweight = 'bold')
     
-    plt.subplot(325)
+    plt.subplot(323)
     x = df.copy()
     x = x.groupby('partner')['churn'].value_counts().to_frame()
     x = x.rename({'churn':'pct_total'}, axis = 1).reset_index()
@@ -134,7 +143,7 @@ def plot_partner_dependents(df):
     u.set_xlabel('')
     u.set_ylabel('Percentage of Total', fontweight = 'bold', fontsize = 20)
     
-    plt.subplot(326)
+    plt.subplot(324)
     y = df.copy()
     y = y.groupby('dependents')['churn'].value_counts().to_frame()
     y = y.rename({'churn':'pct_total'}, axis = 1).reset_index()
@@ -145,15 +154,18 @@ def plot_partner_dependents(df):
     v.set_xlabel('')
     v.set_ylabel('')
     
-    plt.subplot(323)
-    plt.pie(df[df.partner == 'Yes'].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Churn % - Customers with Partners', fontsize = 30, fontweight = 'bold')
+    plt.subplot(325)
+    y = sns.violinplot('partner', 'monthlycharges', 'churn', df, split = True)
+    y.set_title('Violin Plot: Monthly Charges by Partner', fontweight = 'bold', fontsize = 30)
+    y.set_xticklabels(['Partner', 'No Partner'])
+    y.set_xlabel('')
     
-    plt.subplot(324)
-    plt.pie(df[df.dependents == 'Yes'].churn.value_counts(), labels = ['No Churn', 'Churn'], autopct = '%.1f%%', radius = 1, textprops = {'fontsize':20, 'fontweight':'bold'})
-    plt.title('Churn % - Customers with Dependents', fontsize = 30, fontweight = 'bold')
-
-    
+    plt.subplot(326)
+    z = sns.violinplot('dependents', 'monthlycharges', 'churn', df, split = True)
+    z.set_title('Violin Plot: Monthly Charges by Dependents', fontweight = 'bold', fontsize = 30)
+    z.set_xticklabels(['No Dependents', 'Dependents'])
+    z.set_xlabel('')
+    z.set_ylabel('Monthly Charges', fontweight = 'bold', fontsize = 20)
 
 def plot_services(df):
     
