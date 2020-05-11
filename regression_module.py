@@ -92,7 +92,7 @@ def print_metric_comparisons(X, y):
         training_f1.append(f1_score(y_train, y_hat_train))
         testing_f1.append(f1_score(y_test, y_hat_test))
         
-    # Use subplots for scatter pltos of each metric. 
+    # Use subplots to create a scatter plot of each of the 4 metrics. 
     plt.figure(figsize = (20, 10))
     plt.subplot(221)
     plt.title('Precision Score', fontweight = 'bold', fontsize = 30)
@@ -153,7 +153,7 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
     
     # Use Train False/True Positive ratios to plot receiver operating characteristic curve for training set
     plt.subplot(121)
-    plt.plot(train_fpr, train_tpr, color = 'darkorange', lw = lw, label = 'ROC Curve')
+    plt.plot(train_fpr, train_tpr, color = 'red', lw = lw, label = 'ROC Curve')
     # Plot positive line w/ slope = 1 for ROC-curve reference
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
@@ -167,7 +167,7 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
 
     # Use Test False/True positive ratios to plot receiver operating characteristic curve for test set
     plt.subplot(122)
-    plt.plot(test_fpr, test_tpr, color='darkorange',
+    plt.plot(test_fpr, test_tpr, color='red',
          lw=lw, label='ROC curve')
     # Plot positive line w/ slope = 1 for ROC-curve reference
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
