@@ -30,7 +30,7 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
     
     # Add appropriate axis scales
-    tick_marks = np.arange(len(classes))
+    tick_marks = np.arange(len(classes)) # Get class labels to add to matrix
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
     
@@ -91,46 +91,58 @@ def print_metric_comparisons(X, y):
         
     plt.figure(figsize = (20, 10))
     plt.subplot(221)
-    plt.title('Precision Score', fontweight = 'bold')
+    plt.title('Precision Score', fontweight = 'bold', fontsize = 30)
     plt.scatter(list(range(10, 95)), training_precision, label='training_precision')
     plt.scatter(list(range(10, 95)), testing_precision, label='testing_precision')
+    plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(222)
-    plt.title('Recall Score', fontweight = 'bold')
+    plt.title('Recall Score', fontweight = 'bold', fontsize = 30)
     plt.scatter(list(range(10, 95)), training_recall, label='training_recall')
     plt.scatter(list(range(10, 95)), testing_recall, label='testing_recall')
+    plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(223)
-    plt.title('Accuracy Score', fontweight = 'bold')
+    plt.title('Accuracy Score', fontweight = 'bold', fontsize = 30)
     plt.scatter(list(range(10, 95)), training_accuracy, label='training_accuracy')
     plt.scatter(list(range(10, 95)), testing_accuracy, label='testing_accuracy')
+    plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(224)
-    plt.title('F1 Score', fontweight = 'bold')
+    plt.title('F1 Score', fontweight = 'bold', fontsize = 30)
     plt.scatter(list(range(10, 95)), training_f1, label='training_f1')
     plt.scatter(list(range(10, 95)), testing_f1, label='testing_f1')
+    plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.tight_layout()
     
     
 def plot_auc(model, X_train, X_test, y_train, y_test):
+    
+    # Calculate probability score of each point in training set
     y_train_score = model.decision_function(X_train)
+    # Calculate false positive rate, true positive rate, and thresholds for training set
     train_fpr, train_tpr, train_thresholds = roc_curve(y_train, y_train_score)
+    # Calculate probability score of each point in test set
     y_test_score = model.decision_function(X_test)
+    # Calculate false positive rate, true positive rate, and thresholds for test set
     test_fpr, test_tpr, test_thresholds = roc_curve(y_test, y_test_score)
     
+    # Print Area-Under-Curve scores
     print('Training AUC: {}'.format(auc(train_fpr, train_tpr)))
     print('Test AUC: {}'.format(auc(test_fpr, test_tpr)))
     
     plt.figure(figsize = (20, 8))
     lw = 2
     
+    # Use Train False/True Positive ratios to plot receiver operating characteristic curve for training set
     plt.subplot(121)
     plt.plot(train_fpr, train_tpr, color = 'darkorange', lw = lw, label = 'ROC Curve')
+    # Plot positive line w/ slope = 1 for ROC-curve reference
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
@@ -141,10 +153,11 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
     plt.title('Receiver operating characteristic (ROC) Curve for Training Set', fontweight = 'bold', fontsize = 20)
     plt.legend(loc='lower right')
 
-    
+    # Use Test False/True positive ratios to plot receiver operating characteristic curve for test set
     plt.subplot(122)
     plt.plot(test_fpr, test_tpr, color='darkorange',
          lw=lw, label='ROC curve')
+    # Plot positive line w/ slope = 1 for ROC-curve reference
     plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
