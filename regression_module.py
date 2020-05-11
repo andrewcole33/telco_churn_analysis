@@ -64,6 +64,8 @@ def print_metrics(y_train, y_hat_train, y_test, y_hat_test):
     
     
 def print_metric_comparisons(X, y):
+    
+    # Create an empty list for each of the 4 classification metrics (Precision/Recall/Accuracy/F1-Score)
     training_precision = []
     testing_precision = []
     training_recall = []
@@ -72,7 +74,8 @@ def print_metric_comparisons(X, y):
     testing_accuracy = []
     training_f1 = []
     testing_f1 = []
-
+    
+    # Iterate through a range of test_sizes to use for our logistic regression, using same parameters as our first logistic regression in our notebook. Append each respective result metric to its respective list.
     for i in range(10, 95):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=i/100.0)
         logreg = LogisticRegression(fit_intercept=False, C=1e25, solver='liblinear')
@@ -89,31 +92,40 @@ def print_metric_comparisons(X, y):
         training_f1.append(f1_score(y_train, y_hat_train))
         testing_f1.append(f1_score(y_test, y_hat_test))
         
+    # Use subplots for scatter pltos of each metric. 
     plt.figure(figsize = (20, 10))
     plt.subplot(221)
     plt.title('Precision Score', fontweight = 'bold', fontsize = 30)
+    # Scatter plot training precision list
     plt.scatter(list(range(10, 95)), training_precision, label='training_precision')
+    # Scatte4r plot test precision list
     plt.scatter(list(range(10, 95)), testing_precision, label='testing_precision')
     plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(222)
     plt.title('Recall Score', fontweight = 'bold', fontsize = 30)
+    # Scatter plot training recall list
     plt.scatter(list(range(10, 95)), training_recall, label='training_recall')
+    # Scatter plot test recall list
     plt.scatter(list(range(10, 95)), testing_recall, label='testing_recall')
     plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(223)
     plt.title('Accuracy Score', fontweight = 'bold', fontsize = 30)
+    # Scatter plot training accuracy list
     plt.scatter(list(range(10, 95)), training_accuracy, label='training_accuracy')
+    # Scatter plot test accuracy list
     plt.scatter(list(range(10, 95)), testing_accuracy, label='testing_accuracy')
     plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
 
     plt.subplot(224)
     plt.title('F1 Score', fontweight = 'bold', fontsize = 30)
+    # Scatter plot training f1-score list
     plt.scatter(list(range(10, 95)), training_f1, label='training_f1')
+    # Scatter plot testing f1-score list
     plt.scatter(list(range(10, 95)), testing_f1, label='testing_f1')
     plt.xlabel('Model Test Size (%)', fontsize = 20)
     plt.legend(loc = 'best')
