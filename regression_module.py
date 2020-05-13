@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score, roc_curve, auc
     
     
@@ -144,3 +145,18 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
     plt.tight_layout()
 
     
+def find_best_k(X_train, y_train, X_test, y_test, min_k = 1, max_k = 50):
+    best_k = 0
+    best_score = 0.0
+    
+    for k in range(min_k, max_k+1, 2):
+        knn = KNeighborsClassifier(n_neighbors = k)
+        knn.fit(X_train, y_train)
+        preds = knn.predict(X_test)
+        f1 = f1_score(y_test, preds)
+        if f1 > best_score:
+            best_k = k
+            best_score = f1
+            
+    print(f"Best Value for K: {best_k}")
+    print(f"F1-Score: {best_score}")
