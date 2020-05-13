@@ -6,47 +6,6 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_score, roc_curve, auc
-
-def plot_confusion_matrix(cm, classes,
-                          normalize=False,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues):
-    
-    # Check if normalize is set to True
-    # If so, normalize the raw confusion matrix before visualizing
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print("Normalized confusion matrix")
-    else:
-        print('Confusion matrix, without normalization')
-
-    print(cm)
-
-    plt.imshow(cm, cmap=cmap)
-    
-    # Add title and axis labels 
-    plt.title('Confusion Matrix') 
-    plt.ylabel('True label') 
-    plt.xlabel('Predicted label')
-    
-    # Add appropriate axis scales
-    tick_marks = np.arange(len(classes)) # Get class labels to add to matrix
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
-    
-    # Text formatting
-    fmt = '.2f' if normalize else 'd'
-    # Add labels to each cell
-    thresh = cm.max() / 2.
-    # Here we iterate through the confusion matrix and append labels to our visualization 
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
-                 horizontalalignment='center',
-                 color='white' if cm[i, j] > thresh else 'black')
-    
-    # Add a legend
-    plt.colorbar()
-    plt.show() 
     
     
 def print_metrics(y_train, y_hat_train, y_test, y_hat_test):
@@ -77,7 +36,7 @@ def print_metric_comparisons(X, y):
     
     # Iterate through a range of test_sizes to use for our logistic regression, using same parameters as our first logistic regression in our notebook. Append each respective result metric to its respective list.
     for i in range(10, 95):
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=i/100.0)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=i/100.0, random_state = 33)
         logreg = LogisticRegression(fit_intercept=False, C=1e25, solver='liblinear')
         model_log = logreg.fit(X_train, y_train)
         y_hat_test = logreg.predict(X_test)
@@ -180,5 +139,8 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
     plt.title('Receiver operating characteristic (ROC) Curve for Test Set', fontweight = 'bold', fontsize = 20)
     plt.legend(loc='lower right')
     
+    plt.savefig('pics/Regression_pics/roc_curve.png')
+    
     plt.tight_layout()
+
     
