@@ -160,3 +160,4 @@ def find_best_k(X_train, y_train, X_test, y_test, min_k = 1, max_k = 50):
             
     print(f"Best Value for K: {best_k}")
     print(f"F1-Score: {best_score}")
+    
