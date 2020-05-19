@@ -145,7 +145,7 @@ def plot_auc(model, X_train, X_test, y_train, y_test):
     plt.tight_layout()
 
     
-def find_best_k(X_train, y_train, X_test, y_test, min_k = 1, max_k = 50):
+def find_best_k(X_train, y_train, X_test, y_test, min_k = 1, max_k = 100):
     best_k = 0
     best_score = 0.0
     
