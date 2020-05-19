@@ -10,17 +10,17 @@ from sklearn.metrics import precision_score, recall_score, accuracy_score, f1_sc
     
     
 def print_metrics(y_train, y_hat_train, y_test, y_hat_test):
-    print('Training Precision: ', precision_score(y_train, y_hat_train))
-    print('Testing Precision: ', precision_score(y_test, y_hat_test))
+    print('Training Metrics:')
+    print(f'Training Precision: ', round(precision_score(y_train, y_hat_train), 2))
+    print(f'Training Recall: ', round(recall_score(y_train, y_hat_train), 2))
+    print(f'Training Accuracy: ', round(accuracy_score(y_train, y_hat_train), 2))
+    print(f'Training F1-Score: ', round(f1_score(y_train, y_hat_train), 2))
     print('\n')
-    print('Training Recall: ', recall_score(y_train, y_hat_train))
-    print('Testing Recall: ', recall_score(y_test, y_hat_test))
-    print('\n')
-    print('Training Accuracy: ', accuracy_score(y_train, y_hat_train))
-    print('Testing Accuracy: ', accuracy_score(y_test, y_hat_test))
-    print('\n')
-    print('Training F1-Score: ', f1_score(y_train, y_hat_train))
-    print('Testing F1-Score: ', f1_score(y_test, y_hat_test))
+    print(f'Testing Metrics:')
+    print(f'Testing Precision: ', round(precision_score(y_test, y_hat_test),2))
+    print(f'Testing Recall: ', round(recall_score(y_test, y_hat_test),2))
+    print(f'Testing Accuracy: ', round(accuracy_score(y_test, y_hat_test),2))
+    print(f'Testing F1-Score: ', round(f1_score(y_test, y_hat_test),2))
     
     
 def print_metric_comparisons(X, y):
