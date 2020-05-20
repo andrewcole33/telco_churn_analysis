@@ -17,10 +17,11 @@ The data is sourced from Kaggle (https://www.kaggle.com/blastchar/telco-customer
 
 ### <ins/>Included in this Repository<ins/>
 * EDA.ipynb : Commented Walkthrough of the Exploratory Data Analysis process
-* eda_module.py: Module with functions for execution of EDA process
-* regression.ipynb: Commented walkthrough of Logistic Regression
+* log_regression.ipynb: Commented walkthrough of Logistic Regression
+* KNN.ipynb: K-Nearest Neighbors Classification Model 
+* decision_tree.ipynb
 * regression_module.py: Module with functions for execution of Logistic regression
-* KNN.ipynb: K-Nearest Neighbors Classification Model
+* eda_module.py: Module with functions for execution of EDA process
 * Telco Customer Churn Analysis.pdf: Google slides presentation (as if an insight presentation was required per deliverables)
 * data [folder]: Folder containing all used data
 * pics [folder]: Folder containing figures & screenshots for medium blog posts

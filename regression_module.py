@@ -161,3 +161,17 @@ def find_best_k(X_train, y_train, X_test, y_test, min_k = 1, max_k = 100):
     print(f"Best Value for K: {best_k}")
     print(f"F1-Score: {best_score}")
     
+
+def viz_roc(fpr, tpr, roc_auc, string):
+    
+    plt.style.use('ggplot')
+    plt.figure(figsize = (10, 10))
+    plt.plot(fpr, tpr, lw = 2, label = f"{string} AUC = "+str(roc_auc))
+    plt.plot([0,1], [0,1], lw = 2, ls = '--')
+    plt.xlim([0,1])
+    plt.ylim([0,1.05])
+    plt.xlabel('False Positive Rate', fontweight = 'bold', fontsize = 20)
+    plt.ylabel('True Positive Rate', fontweight = 'bold', fontsize = 20)
+    plt.title(f'ROC Curve: {string}', fontsize = 25, fontweight = 'bold')
+    plt.legend(loc = 4, fontsize =15)
+    plt.tight_layout()
