@@ -16,7 +16,7 @@ In this repository I will utilize a telecommunication company's (Telco) customer
 The data is sourced from Kaggle (https://www.kaggle.com/blastchar/telco-customer-churn). Our dataset contains 7043 entries representing 7043 unique customers. There are 21 columns, with 19 features (target feature = 'Churn'). The features are numeric and categorical in nature, so we will need to address these differences before modeling.
 
 ### <ins/>Included in this Repository<ins/>
-* EDA.ipynb : Commented Walkthrough of the Exploratory Data Analysis process
+* EDA.ipynb : Commented Walkthrough of the Exploratory Data Analysis process and visualizations
 * decision_tree.ipynb: Decision Tree Classification Model
 * KNN.ipynb: K-Nearest Neighbors Classification Model 
 * decision_tree.ipynb: Decision Tree Classification Model    
@@ -29,3 +29,5 @@ The data is sourced from Kaggle (https://www.kaggle.com/blastchar/telco-customer
     
 * data [folder]: Folder containing all used data
 * pics [folder]: Folder containing figures & screenshots for medium blog posts
+    
+
